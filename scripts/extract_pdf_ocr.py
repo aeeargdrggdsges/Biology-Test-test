@@ -46,11 +46,14 @@ def main():
     parser.add_argument("pdf", type=Path)
     parser.add_argument("output_dir", type=Path)
     parser.add_argument("--dpi", type=int, default=200)
+    parser.add_argument("--tag", type=str, default=None,
+                         help="Suffix appended to output filenames, e.g. 'pass2'.")
     args = parser.parse_args()
 
     stem = args.pdf.stem
-    images_dir = args.output_dir / "images" / stem
-    md_path = args.output_dir / f"{stem}.md"
+    out_name = f"{stem}_{args.tag}" if args.tag else stem
+    images_dir = args.output_dir / "images" / out_name
+    md_path = args.output_dir / f"{out_name}.md"
 
     print(f"Rendering pages for {args.pdf.name} at {args.dpi} DPI...")
     page_paths = render_pdf_pages(args.pdf, images_dir, args.dpi)
